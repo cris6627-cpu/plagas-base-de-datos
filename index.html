@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Plagas</title>
+
+<style>
+
+/* FONDO */
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    display:flex;
+    background:#ecf0f1;
+}
+
+/* TÍTULO */
+h1{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    margin:0;
+    padding:20px;
+    background:#3498db;
+    color:white;
+    z-index:1000;
+}
+
+/* MENÚ */
+#lista{
+    width:280px;
+    background:#2c3e50;
+    height:100vh;
+    overflow-y:auto;
+    margin-top:80px;
+    padding:0;
+}
+
+/* BOTONES */
+#lista li{
+    list-style:none;
+    color:white;
+    padding:15px;
+    border-bottom:1px solid #3d566e;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+#lista li:hover{
+    background:#34495e;
+}
+
+/* CONTENIDO */
+#detalle{
+    flex:1;
+    padding:100px 30px 30px 30px;
+}
+
+/* TARJETA */
+.card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0px 0px 10px rgba(0,0,0,0.2);
+}
+
+/* IMAGEN */
+.card img{
+    width:350px;
+    max-width:100%;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0px 0px 10px gray;
+}
+
+/* TEXTO */
+h2{
+    color:#2c3e50;
+}
+
+p{
+    line-height:1.6;
+}
+
+b{
+    color:#2980b9;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Plagas</h1>
+
+<ul id="lista"></ul>
+
+<div id="detalle">
+
+    <div class="card">
+
+        <h2>Bienvenido</h2>
+
+        <p>Selecciona una plaga del menú lateral.</p>
+
+    </div>
+
+</div>
+
+<script>
+
+/* BASE DE DATOS */
+
+const plagas = [
+
+{
+id:1,
+nombreComun:"Periquito del aguacate",
+orden:"Hemiptera",
+familia:"Membracidae",
+nombreCientifico:"Metcalfiella monogramma",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Planta de aguacate",
+colector:"Juan Eduardo González C.",
+fecha:"27 septiembre 2025",
+determino:"Ernst Friedrich Germar, 1835",
+lugar:"Guadalupe Yucuhio, Santiago Juxtlahuaca",
+coordenadas:"17°14'18.7\"N 98°01'47.6\"W",
+imagen:"periquito.jpeg"
+},
+
+{
+id:2,
+nombreComun:"Gallina ciega",
+orden:"Coleoptera",
+familia:"Scarabaeidae",
+nombreCientifico:"Phyllophaga spp.",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Suelo en cultivo de maíz",
+colector:"Juan Eduardo González C.",
+fecha:"29 septiembre 2025",
+determino:"Thaddeus William Harris, 1827",
+lugar:"Guadalupe Yucuhio, Santiago Juxtlahuaca",
+coordenadas:"17°14'08.2\"N 98°01'50.0\"W",
+imagen:"gallina.jpeg"
+},
+
+{
+id:3,
+nombreComun:"Gusano cogollero",
+orden:"Lepidoptera",
+familia:"Noctuidae",
+nombreCientifico:"Spodoptera frugiperda",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Plantas de maíz",
+colector:"Juan Eduardo González C.",
+fecha:"5 octubre 2025",
+determino:"J. E. Smith, 1797",
+lugar:"Guadalupe Yucuhio, Santiago Juxtlahuaca",
+coordenadas:"17°13'41.1\"N 98°01'47.0\"W",
+imagen:"cogollero.jpeg"
+},
+
+{
+id:4,
+nombreComun:"Chicharritas",
+orden:"Hemiptera",
+familia:"Membracidae",
+nombreCientifico:"Enchenopa binotata",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Plantas leñosas",
+colector:"Juan Eduardo González C.",
+fecha:"25 octubre 2025",
+determino:"Thomas Say, 1824",
+lugar:"Guadalupe Yucuhio, Santiago Juxtlahuaca",
+coordenadas:"17°14'08.2\"N 98°01'51.4\"W",
+imagen:"chicharritas.jpeg"
+},
+
+{
+id:5,
+nombreComun:"Chinche café",
+orden:"Hemiptera",
+familia:"Pentatomidae",
+nombreCientifico:"Halyomorpha halys",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Planta de frijol",
+colector:"Juan Eduardo González C.",
+fecha:"25 octubre 2025",
+determino:"Carl Stål, 1855",
+lugar:"Guadalupe Yucuhio, Santiago Juxtlahuaca",
+coordenadas:"17°14'17.0\"N 98°02'05.3\"W",
+imagen:"chinche.jpeg"
+},
+
+{
+id:6,
+nombreComun:"Gusano cortador",
+orden:"Lepidoptera",
+familia:"Noctuidae",
+nombreCientifico:"Agrotis ipsilon",
+localidad:"San Juan Mixtepec Distrito 08, Oaxaca",
+habitat:"Cultivo de maíz",
+colector:"Cristian Santiago Sánchez",
+fecha:"27 septiembre 2025",
+determino:"Johann Siegfried Hufnagel, 1766",
+lugar:"San Juan Mixtepec Distrito 08",
+coordenadas:"17°18'00.4\"N 97°50'32.3\"W",
+imagen:"cortador.jpeg"
+},
+
+{
+id:7,
+nombreComun:"Polilla io",
+orden:"Lepidoptera",
+familia:"Saturniidae",
+nombreCientifico:"Automeris io",
+localidad:"San Juan Mixtepec Distrito 08, Oaxaca",
+habitat:"Calabaza",
+colector:"Cristian Santiago Sánchez",
+fecha:"27 septiembre 2025",
+determino:"Johan Christian Fabricius, 1775",
+lugar:"San Juan Mixtepec Distrito 08",
+coordenadas:"17°19'28.0\"N 97°50'22.4\"W",
+imagen:"io.jpeg"
+},
+
+{
+id:8,
+nombreComun:"Oruga de la polilla esfinge halcón",
+orden:"Lepidoptera",
+familia:"Sphingidae",
+nombreCientifico:"Xylophanes falco",
+localidad:"San Juan Mixtepec Distrito 08, Oaxaca",
+habitat:"Tomate",
+colector:"Cristian Santiago Sánchez",
+fecha:"27 septiembre 2025",
+determino:"Francis Walker, 1856",
+lugar:"San Juan Mixtepec Distrito 08",
+coordenadas:"17°18'06.7\"N 97°50'21.2\"W",
+imagen:"esfinge.jpeg"
+},
+
+{
+id:9,
+nombreComun:"Avispa de la semilla de anona",
+orden:"Hymenoptera",
+familia:"Eurytomidae",
+nombreCientifico:"Bephratelloides cubensis",
+localidad:"San Juan Mixtepec Distrito 08, Oaxaca",
+habitat:"Maíz",
+colector:"Cristian Santiago Sánchez",
+fecha:"27 septiembre 2025",
+determino:"William Ashmead, 1894",
+lugar:"San Juan Mixtepec Distrito 08",
+coordenadas:"17°18'06.7\"N 97°50'21.2\"W",
+imagen:"anona.jpeg"
+},
+
+{
+id:10,
+nombreComun:"Conchuela",
+orden:"Hemiptera",
+familia:"Coccidae",
+nombreCientifico:"Saissetia coffeae",
+localidad:"San Sebastián Nicananduta, Oaxaca",
+habitat:"Tallos de guayaba en regiones tropicales y subtropicales",
+colector:"Christian Salazar Cruz",
+fecha:"27 noviembre 2025",
+determino:"Olivier",
+lugar:"San Sebastián Nicananduta",
+coordenadas:"17°31'00\"N 97°41'00\"W",
+imagen:"conchuela.jpeg"
+},
+
+{
+id:11,
+nombreComun:"Gusano barrenador",
+orden:"Coleoptera",
+familia:"Curculionidae",
+nombreCientifico:"Conotrachelus aguacatae",
+localidad:"San Sebastián Nicananduta, Oaxaca",
+habitat:"Plantaciones de aguacate",
+colector:"Christian Salazar Cruz",
+fecha:"30 noviembre 2025",
+determino:"François Marie Auguste Dejean 1835",
+lugar:"San Sebastián Nicananduta",
+coordenadas:"17°31'00\"N 97°41'00\"W",
+imagen:"barrenador.jpeg"
+},
+
+{
+id:12,
+nombreComun:"Escarabajo de frijol",
+orden:"Coleoptera",
+familia:"Chrysomelidae",
+nombreCientifico:"Cerotoma trifurcata",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Campos de frijol",
+colector:"Aylin M. De Jesús Tello",
+fecha:"14 septiembre 2025",
+determino:"No registrado",
+lugar:"Área de cultivo",
+coordenadas:"17.346301, -98.010712",
+imagen:"frijol.jpeg"
+},
+
+{
+id:13,
+nombreComun:"Chapulín",
+orden:"Orthoptera",
+familia:"Acrididae",
+nombreCientifico:"Sphenarium spp.",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Maíz",
+colector:"Neysa Lizette Ortiz López",
+fecha:"30 noviembre 2025",
+determino:"Acridium piceifrons en 1870",
+lugar:"Santiago Juxtlahuaca",
+coordenadas:"No registradas",
+imagen:"chapulin.jpeg"
+},
+
+{
+id:14,
+nombreComun:"Oruga del gusano de otoño",
+orden:"Lepidoptera",
+familia:"Noctuidae",
+nombreCientifico:"Spodoptera frugiperda",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Maíz",
+colector:"Neysa Lizette Ortiz López",
+fecha:"25 septiembre 2025",
+determino:"J.E. Smith en el año 1797",
+lugar:"Santiago Juxtlahuaca",
+coordenadas:"17.34520° N, 98.01308° W",
+imagen:"otono.jpeg"
+},
+
+{
+id:15,
+nombreComun:"Mariposa gigante de los cítricos",
+orden:"Lepidoptera",
+familia:"Papilionidae",
+nombreCientifico:"Papilio cresphontes",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Campos de árboles cítricos",
+colector:"Aylin M. De Jesús Tello",
+fecha:"14 septiembre 2025",
+determino:"Pieter Cramer, 1777",
+lugar:"Área de cultivo",
+coordenadas:"17.346301, -98.010712",
+imagen:"mariposa.jpeg"
+},
+
+{
+id:16,
+nombreComun:"Escarabajo ampolla",
+orden:"Coleoptera",
+familia:"Meloidae",
+nombreCientifico:"Epicauta fabricii",
+localidad:"San Sebastián Nicananduta, Oaxaca",
+habitat:"Pastizales, praderas y cultivos agrícolas",
+colector:"Christian Salazar Cruz",
+fecha:"20 noviembre 2025",
+determino:"LeConte, 1853",
+lugar:"San Sebastián Nicananduta",
+coordenadas:"17°31'00\"N 97°41'00\"W",
+imagen:"ampolla.jpeg"
+},
+
+{
+id:17,
+nombreComun:"Buck",
+orden:"Lepidoptera",
+familia:"Saturniidae",
+nombreCientifico:"Hemileuca maia",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Árboles del género Quercus",
+colector:"Aylin M. De Jesús Tello",
+fecha:"14 septiembre 2025",
+determino:"Dru Drury, 1773",
+lugar:"Área de cultivo",
+coordenadas:"17.346301, -98.010712",
+imagen:"buck.jpeg"
+},
+
+{
+id:18,
+nombreComun:"Azotador",
+orden:"Lepidoptera",
+familia:"Saturniidae",
+nombreCientifico:"Hylesia nigricans",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Se alimenta de hojas",
+colector:"Fabián Sánchez Vásquez",
+fecha:"13 septiembre 2025",
+determino:"Carl Berg, 1875",
+lugar:"Santiago Juxtlahuaca",
+coordenadas:"17°19'05.2\"N 98°00'24.3\"W",
+imagen:"azotador.jpeg"
+},
+
+{
+id:19,
+nombreComun:"Chinches",
+orden:"Hemiptera",
+familia:"Miridae",
+nombreCientifico:"Bagrada hilaris",
+localidad:"Santiago Juxtlahuaca, Oaxaca",
+habitat:"Solanáceas",
+colector:"Fabián Sánchez Vásquez",
+fecha:"13 septiembre 2025",
+determino:"Burmeister, 1835",
+lugar:"Santiago Juxtlahuaca",
+coordenadas:"17°19'05.2\"N 98°00'24.3\"W",
+imagen:"chinches.jpeg"
+}
+
+];
+
+/* ELEMENTOS */
+
+const lista = document.getElementById("lista");
+
+const detalle = document.getElementById("detalle");
+
+/* CREAR MENÚ */
+
+plagas.forEach(p => {
+
+    const li = document.createElement("li");
+
+    li.textContent = p.nombreComun;
+
+    li.onclick = () => {
+
+        detalle.innerHTML = `
+
+        <div class="card">
+
+            <img src="${p.imagen}">
+
+            <h2>${p.nombreComun}</h2>
+
+            <p><b>Nombre científico:</b>
+            <i>${p.nombreCientifico}</i></p>
+
+            <p><b>Orden:</b> ${p.orden}</p>
+
+            <p><b>Familia:</b> ${p.familia}</p>
+
+            <p><b>Localidad:</b> ${p.localidad}</p>
+
+            <p><b>Hábitat y/o hospedero:</b> ${p.habitat}</p>
+
+            <p><b>Colector:</b> ${p.colector}</p>
+
+            <p><b>Fecha:</b> ${p.fecha}</p>
+
+            <p><b>Determinó:</b> ${p.determino}</p>
+
+            <p><b>Lugar de colecta:</b> ${p.lugarColecta}</p>
+
+            <p><b>Coordenadas:</b> ${p.coordenadas}</p>
+
+        </div>
+
+        `;
+    };
+
+    lista.appendChild(li);
+
+});
+
+</script>
+
+</body>
+</html>
